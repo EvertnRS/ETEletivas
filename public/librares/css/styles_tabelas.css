@@ -1,0 +1,86 @@
+@charset "UTF-8";
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 100px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: rgb(2, 2, 172);
+    height: 30px;
+    border: 1px solid rgb(2, 2, 172);
+    color: white;
+    position: sticky;
+    top: 59px;
+    z-index: -1;
+}
+
+td {
+    text-align: center;
+    border: 1px solid black;
+    margin: auto;
+    padding: 30px;
+}
+
+tbody tr {
+    cursor: default;
+    transition: background-color 0.2s ease-in-out;
+}
+
+tbody tr:hover {
+    background-color: rgb(183, 183, 183);
+}
+
+.alinhar {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.acoes {
+    width: 150px;
+    height: 60px;
+    margin: 3px;
+    padding: 5px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: black;
+}
+
+.atualizar {
+    background-color: rgb(160, 187, 255);
+    transition: background-color 0.2s ease-in-out;
+}
+
+.excluir {
+    background-color: rgb(255, 97, 97);
+    transition: background-color 0.2s ease-in-out;
+}
+
+.atualizar:hover {
+    background-color: rgb(72, 120, 254); 
+}
+
+.excluir:hover {
+    background-color: rgb(255, 28, 28);
+}
+
+@media (max-width: 672px){
+    table {
+        font-size: 9px;
+    }
+
+    .acoes {
+        width: 57px;
+        height: 17px;
+    }
+}

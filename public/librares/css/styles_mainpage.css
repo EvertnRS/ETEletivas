@@ -1,0 +1,48 @@
+@charset "UTF-8";
+
+.corpo {
+    margin: 60px auto auto auto;
+    width: 90vw;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+.bem_vindo {
+    width: 100%;
+    text-align: center;
+}
+
+.content {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.item {
+    background-color: rgba(132, 196, 196, 0.663);
+    width: 35vh;
+    height: 35vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    transition: background-color 0.2s ease-in-out;
+    transition: height 0.15s ease-in-out;
+}
+
+.item:hover {
+    background-color: rgb(91, 135, 185);
+    width: 40vh;
+    height: 40vh;
+}
+
+.item p {
+    font-size: 20px;
+    font-weight: bold;
+}

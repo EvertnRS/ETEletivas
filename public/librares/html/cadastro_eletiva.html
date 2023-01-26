@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/styles_cadastroeletiva.css">
+    <title>Cadastrar Eletiva</title>
+</head>
+<body>
+    <header>
+        <h1>Cadastrar Eletiva</h1>
+    </header>
+    <main>
+        <div class="visual">
+            <img src="../../imagens/livro.png" alt="livro" class="imagem">
+        </div>
+        <div class="conteudo">
+            <form>
+                <input type="text" name="nome_eletiva" id="nome_eletiva" placeholder="Nome da Eletiva" class="nome">
+                <select name="area_conhecimento" id="area_conhecimento">
+                    <option disabled selected>Área do conhecimento</option>
+                    <option value="livre">Livre</option>
+                    <option value="humanas">Humanas</option>
+                    <option value="humanas">Exatas</option>
+                    <option value="humanas">Linguagens</option>
+                    <option value="humanas">Natureza</option>
+                </select>
+                <textarea name="resumo_eletiva" id="resumo_eletiva" cols="30" rows="10" placeholder="Resumo"></textarea>
+                <input type="button" value="Criar Eletiva" class="btn">
+            </form>
+        </div>
+    </main>
+</body>
+</html>

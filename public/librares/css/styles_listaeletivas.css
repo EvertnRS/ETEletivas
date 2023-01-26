@@ -1,0 +1,153 @@
+@charset "UTF-8";
+
+* {
+    font-family: cursive;
+}
+
+header {
+    width: 100%;
+    height: auto;
+    background-color: rgb(0, 141, 235);
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: fixed;
+    overflow: hidden;
+}
+
+
+h1 {
+    color: white;
+    font-size: 35px;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+header div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.container {
+    background-color: rgb(2, 2, 172);
+    margin-top: 90px;
+    width: 40vw;
+}
+
+.corpo {
+    margin: 5px; 
+    height: auto;
+    background-color: rgb(160, 255, 255);  
+    padding-left: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    transition: background-color 0.2s ease-in-out;
+    transition: height 0.2s ease-in-out;
+}
+
+.corpo:hover {
+    height: 90px;
+    background-color: rgb(0, 156, 156);
+}
+
+.visual {
+    width: 5.5vw;
+    height: 5.5vw;
+    margin-top: 5px;
+    border-radius: 1vw;
+}
+
+.textual {
+    margin: 5px;
+    background-color: beige;
+    width: 35vw;
+    height: auto;
+    border-radius: 5px;
+}
+
+.textual h2 {
+    font-size: 20px;
+    text-align: center;
+}
+
+.info {
+    display: flex;
+    flex-direction: row;
+    margin: 5px;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.info div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 5px;
+}
+
+.info h3 {
+    font-size: 16px;
+}
+
+.info p {
+    margin-left: 5px;
+}
+
+
+
+@media (max-width: 890px) {
+    h1 {
+        font-size: 20px;
+    }
+
+    .pesquisa {
+        width: 171px;
+        height: 25px;
+        font-size: 9px;
+    }
+
+    header button {
+        width: 25px;
+        height: 25px;
+    }
+        
+    .info p{
+        font-size: 9px;
+    }
+
+    .info h3 {
+        font-size: 9px;
+    }
+
+    .textual h2 {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 460px) {
+    .container {
+        width: 184px;
+    }
+
+    .textual {
+        width: 126px;
+    }
+
+    .visual {
+        width: 28px;
+        height: 28px;
+    }
+}

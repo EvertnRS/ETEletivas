@@ -1,0 +1,37 @@
+@charset "UTF-8";
+
+* {
+    font-family: cursive;
+}
+
+main div {
+    margin: auto;
+    padding: 10px;
+    width: 75vw;
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
+    gap: 30px;
+}
+
+main h1 {
+    color: rgb(24, 77, 147);
+    font-size: 40px;
+}
+
+main p {
+    max-width: 600px;
+}
+
+@media (max-width: 450px) {
+    main h1 {
+        font-size: 22px;
+    }
+
+    main p {
+        font-size: 9px;
+    }
+}

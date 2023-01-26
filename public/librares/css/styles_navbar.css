@@ -1,0 +1,176 @@
+@charset "UTF-8";
+
+* {
+  font-family: cursive;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgb(0, 141, 235);
+}
+
+.cabecalho {
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 10px 0 10px;
+  padding: 5px;
+}
+
+.titulo {
+  font-size: 35px;
+  color: white;
+}
+
+.lista_usuario {
+  background-color: rgba(255, 255, 255, 0.864);
+  position: fixed;
+  top: -100%;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.lista_eletiva {
+  background-color: rgba(255, 255, 255, 0.864);
+  position: fixed;
+  top: -100%;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.lista_usuario ul {
+  margin: 0;
+  padding: 0;
+}
+
+.lista_eletiva ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  width: 90px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.2s ease-in-out;
+  transition: height 0.15s ease-in-out;
+}
+
+li:hover {
+  background-color: rgb(193, 205, 205);
+  height: 35px;
+}
+
+.link {
+  text-decoration: none;
+  color: black;
+}
+
+.lista_usuario.aparecer {
+  top: 60px;
+}
+
+.lista_eletiva.aparecer {
+  top: 60px;
+}
+
+.btn {
+  background-color: rgba(240, 248, 255, 0);
+  border: none;
+  width: 100px;
+  height: 30px;
+  color: white;
+  text-align: center;
+  font-size: 20px; 
+  cursor: pointer;
+  
+}
+
+.usuario {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.usuario img {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+}
+
+.usuario p{
+  margin: auto;
+  max-width: 32ch;
+  text-align: center;
+  color: white;
+}
+
+.sair {
+  background-color: rgba(245, 241, 231, 0.864);
+  position: fixed;
+  top: -100%;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.sair ul {
+  margin: 0;
+  padding: 0;
+}
+
+.sair.aparecer {
+  top: 60px;
+}
+
+@media (max-width: 672px) {
+  
+  .titulo {
+    font-size: 20px;
+    color: white;
+  }
+
+  li {
+    width: 51px;
+    height: 17px;
+    font-size: 9px;
+  }
+
+  .lista_usuario.aparecer {
+    top: 38px;
+  }
+
+  .lista_eletiva.aparecer {
+    top: 38px;
+  }
+  
+  .btn {
+    width: 70px;
+    height: 21px;
+    font-size: 12px;
+  }
+
+  .usuario p{
+    max-height: 24px;
+    font-size: 9px;
+    overflow: hidden;
+  }
+
+  .usuario img {
+    width: 23px;
+    height: 23px;
+  }
+
+  .sair.aparecer {
+    top: 38px;
+  }
+}
