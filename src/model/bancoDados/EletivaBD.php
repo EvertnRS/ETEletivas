@@ -16,7 +16,7 @@ class EletivaBD
 
     public function adicionar(Eletiva $eletiva)
     {
-        $comando = "INSERT INTO Eletivas (nome, descricao, areaConhecimento, idProfessor) VALUES (?, ?, ?, ?);";
+        $comando = "INSERT INTO Eletivas (nome, descricao, areaConhecimento, idProfessor, vagas) VALUES (?, ?, ?, ?, 30);";
 
         $nome = $eletiva->getNome();
         $descricao = $eletiva->getDescricao();
