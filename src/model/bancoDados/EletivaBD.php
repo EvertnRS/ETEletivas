@@ -16,20 +16,22 @@ class EletivaBD
 
     public function adicionar(Eletiva $eletiva)
     {
-        $comando = "INSERT INTO Eletivas (nome, descricao, areaConhecimento, idProfessor) VALUES (?, ?, ?, ?);";
+        $comando = "INSERT INTO Eletivas (nome, descricao, areaConhecimento, idProfessor, vagas) VALUES (?, ?, ?, ?, ?);";
 
         $nome = $eletiva->getNome();
         $descricao = $eletiva->getDescricao();
         $areaConhecimento = $eletiva->getAreaConhecimento();
         $idProfessor = $eletiva->getProfessor();
+        $vagas = $eletiva->getVagas();
 
         $preparacao = $this->conexao->mysqli->prepare($comando);
         $preparacao->bind_param(
-            "ssss",
+            "ssssi",
             $nome,
             $descricao,
             $areaConhecimento,
-            $idProfessor
+            $idProfessor,
+            $vagas
         );
 
         $preparacao->execute();
@@ -126,20 +128,6 @@ class EletivaBD
         return $usuario;
     }
 
-    public function getIdProfessor($id)
-    {
-        $comando = "SELECT * FROM Eletivas WHERE idProfessor = '$id';";
-
-        $preparacao = $this->conexao->mysqli->prepare($comando);
-        $preparacao->bind_param("i", $id);
-        $preparacao->execute();
-
-        $resultado = $preparacao->get_result();
-        if ($resultado == false) {
-            return null;
-        }
-    }
-
     // public function getNomeAluno() 
     // {
     //     $comando = "SELECT a.*, u.usuario FROM Alunos e LEFT JOIN Usuarios u on u.id = a.idUsuario";
@@ -150,11 +138,15 @@ class EletivaBD
     //     }
     // }
 
-    public function getListaAlunos()
+    public function getListaAlunos($nome)
     {
-        $comando = "SELECT a.idAluno, u.usuario, e.nome FROM Alunos a INNER JOIN Usuarios u on (a.idAluno = u.id) INNER JOIN Eletivas e on (a.eletiva = e.idEletiva);";
+        $comando = "SELECT a.idAluno, u.usuario, e.nome FROM Alunos a INNER JOIN Usuarios u on (a.idAluno = u.id) INNER JOIN Eletivas e on (a.eletiva = e.idEletiva) WHERE e.nome = ?";
 
-        $resultado = $this->conexao->mysqli->query($comando);
+        $preparacao = $this->conexao->mysqli->prepare($comando);
+        $preparacao->bind_param("s", $nome);
+        $preparacao->execute();
+
+        $resultado = $preparacao->get_result();
         if ($resultado == false) {
             return null;
         }
@@ -167,6 +159,79 @@ class EletivaBD
 
         $this->conexao->fecharConexao();
         return $listaAlunos;
+    }
+
+    public function getEletivaPorId($id) {
+        $comando = "SELECT nome FROM Eletivas WHERE idEletiva = ?";
+
+        $preparacao = $this->conexao->mysqli->prepare($comando);
+        $preparacao->bind_param("i", $id);
+        $preparacao->execute();
+
+        $resultado = $preparacao->get_result();
+        if ($resultado == false) {
+            return null;
+        }
+
+        $nomes = array();
+        while ($linha = $resultado->fetch_assoc()) {
+            $nomes[] = $linha['nome'];
+        }
+    
+        return $nomes;
+    }
+
+    public function getEletivaPorProfessor($id) {
+        $comando = "SELECT nome FROM Eletivas WHERE idProfessor = ?";
+
+        $preparacao = $this->conexao->mysqli->prepare($comando);
+        $preparacao->bind_param("i", $id);
+        $preparacao->execute();
+
+        $resultado = $preparacao->get_result();
+        if ($resultado == false) {
+            return null;
+        }
+
+        $nomes = array();
+        while ($linha = $resultado->fetch_assoc()) {
+            $nomes[] = $linha['nome'];
+        }
+    
+        return $nomes;
+    }
+
+    public function getVagas($id) {
+        $comando = "SELECT vagas FROM Eletivas WHERE idEletiva = ?";
+
+        $preparacao = $this->conexao->mysqli->prepare($comando);
+        $preparacao->bind_param("i", $id);
+        $preparacao->execute();
+
+        $resultado = $preparacao->get_result();
+        if ($resultado == false) {
+            return null;
+        }
+
+        $vagas = array();
+        while ($linha = $resultado->fetch_assoc()) {
+            $vagas[] = $linha['vagas'];
+        }
+    
+        return $vagas;
+    }
+
+    public function atualizarVagas($id) {
+        $comando = "UPDATE Eletivas SET Vagas = Vagas - 1 WHERE idEletiva = ?";
+
+        $preparacao = $this->conexao->mysqli->prepare($comando);
+        $preparacao->bind_param("i", $id);
+        $preparacao->execute();
+
+        $resultado = $preparacao->get_result();
+        if ($resultado == false) {
+            return null;
+        }
     }
 
 

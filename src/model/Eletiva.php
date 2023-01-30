@@ -10,15 +10,17 @@ class Eletiva
     private $descricao;
     private $areaConhecimento;
     private $idProfessor;
+    private $vagas;
 
 
-    public function __construct($nome, $descricao, $areaConhecimento, $idProfessor, $idEletiva = null)
+    public function __construct($nome, $descricao, $areaConhecimento, $idProfessor, $idEletiva = null,)
     {
         $this->nome = $nome;
         $this->descricao = $descricao;
         $this->areaConhecimento = $areaConhecimento;
         $this->idProfessor = $idProfessor;
         $this->idEletiva = $idEletiva;
+        $this->vagas = 30;
     }
 
     public function getId()
@@ -44,5 +46,10 @@ class Eletiva
     public function getProfessor()
     {
         return $this->idProfessor;
+    }
+
+    public function getVagas()
+    {
+        return $this->vagas;
     }
 }

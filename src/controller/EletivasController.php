@@ -172,27 +172,40 @@ class EletivasController extends Controller implements RequestHandlerInterface
             return $validate;
         }
 
-        $alunoBD = new AlunoBD();
-        $aluno = new Aluno(
-            $_SESSION["id"],                        /* ID DO USUARIO LOGADO */
-            $request->getParsedBody()["eletiva"],   /* ELETIVA SELECIONADA */
-            $_SESSION["id"]                         /* IDALUNO - AUTO_INCREMENT PELO BANCO */
-        );
+        $idEletiva = $request->getParsedBody()["eletiva"];
 
-        $listaAlunos = new EletivaBD();
-        $listaAlunos = $listaAlunos->getListaAlunos();
+        $eletivaBD = new EletivaBD();
+        $nome = $eletivaBD->getEletivaPorId($idEletiva);
 
+        $eletivaBD = new EletivaBD();
+        $listaAlunos = $eletivaBD->getListaAlunos($nome[0]);
+        
         $qntAlunos = count($listaAlunos);
+        
+        $eletivaBD = new EletivaBD();
+        $vagas = $eletivaBD->getVagas($idEletiva);
 
-        if($qntAlunos <= 40){
+        if ($qntAlunos < $vagas[0]) {
+            $alunoBD = new AlunoBD();
+            $aluno = new Aluno(
+                $_SESSION["id"],                        /* ID DO USUARIO LOGADO */
+                $request->getParsedBody()["eletiva"],   /* ELETIVA SELECIONADA */
+                $_SESSION["id"]                         /* IDALUNO - AUTO_INCREMENT PELO BANCO */
+            );
+
             $alunoBD->adicionar($aluno);
+
+            $eletivaBD = new EletivaBD();
+            $eletivaBD = $eletivaBD->atualizarVagas($idEletiva);
+    
+            $response = new Response(302, ["Location" => "/main_page"], null);
+            return $response;
         } else {
-            die ("ELETIVA CHEIA");
+            $bodyHTTP = $this->getHTTPBodyBuffer("/erro/Erro_404.php");
+            $response = new Response(404, ["Serve" => "Matheus Server"], $bodyHTTP);
+            return $response;
         }
 
-
-        $response = new Response(302, ["Location" => "/main_page"], null);
-        return $response;
     }
 
     public function listaAlunos(ServerRequestInterface $request): ResponseInterface
@@ -202,8 +215,13 @@ class EletivasController extends Controller implements RequestHandlerInterface
             return $validate;
         }
 
+        $id = $_SESSION["id"];
+
+        $eletivaNome = new EletivaBD();
+        $eletivaNome = $eletivaNome->getEletivaPorProfessor($id);
+
         $listaAlunos = new EletivaBD();
-        $listaAlunos = $listaAlunos->getListaAlunos();
+        $listaAlunos = $listaAlunos->getListaAlunos($eletivaNome[0]);
         
         $bodyHttp = $this->getHTTPBodyBuffer("/eletiva/listaAlunos.php", ["listaAlunos" => $listaAlunos]);
         $response = new Response(200, [], $bodyHttp);
