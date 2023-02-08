@@ -15,6 +15,10 @@
     <main>
         <div class="alinhar">
             <h1>Lista de Eletivas</h1>
+            <form action="/eletiva/lista" method="GET">
+                <input type="search" placeholder="Pesquisa" id="search" name="search">
+                <button type="submit" style="width: 50px; heigth:150px;">Pesquisar</button>
+            </form>
             <table>
                 <thead>
                     <tr>
@@ -29,15 +33,28 @@
                 <tbody>
                     <?php foreach ($listaEletivas as $eletiva) { ?>
                         <tr>
-                            <td scope="row" colspan="3"> <?php echo $eletiva["idEletiva"]; ?></td>
-                            <td colspan="3"> <?php echo $eletiva["nome"]; ?></td>
-                            <td colspan="3"> <?php echo $eletiva["descricao"]; ?></td>
-                            <td colspan="3"> <?php echo $eletiva["areaConhecimento"]; ?></td>
-                            <td colspan="3"> <?php echo $eletiva["usuario"]; ?></td>
-                            <td colspan="3">
-                                <?php echo "<a class='acoes atualizar' href='/eletiva/atualizar?id=" .  $eletiva["idEletiva"] . "'>Atualizar</a>"; ?>
-                                <?php echo "<a class='acoes excluir' href='/eletiva/delete?id=" . $eletiva["idEletiva"] . "'>Excluir</a>"; ?>
-                            </td>
+                            <?php if (is_null($eletiva)) { ?>   
+                                <?php $eletiva = $listaEletivas; ?>
+                                <td scope="row" colspan="3"> <?php echo $eletiva["idEletiva"]; ?></td>
+                                <td colspan="3"> <?php echo $eletiva["nome"]; ?></td>
+                                <td colspan="3"> <?php echo $eletiva["descricao"]; ?></td>
+                                <td colspan="3"> <?php echo $eletiva["areaConhecimento"]; ?></td>
+                                <td colspan="3"> <?php echo $eletiva["usuario"]; ?></td>
+                                <td colspan="3">
+                                    <?php echo "<a class='acoes atualizar' href='/eletiva/atualizar?id=" .  $eletiva["idEletiva"] . "'>Atualizar</a>"; ?>
+                                    <?php echo "<a class='acoes excluir' href='/eletiva/delete?id=" . $eletiva["idEletiva"] . "'>Excluir</a>"; ?>
+                                </td>
+                            <?php }else if (!is_null($eletiva)) { ?>
+                                <td scope="row" colspan="3"> <?php echo $eletiva["idEletiva"]; ?></td>
+                                <td colspan="3"> <?php echo $eletiva["nome"]; ?></td>
+                                <td colspan="3"> <?php echo $eletiva["descricao"]; ?></td>
+                                <td colspan="3"> <?php echo $eletiva["areaConhecimento"]; ?></td>
+                                <td colspan="3"> <?php echo $eletiva["usuario"]; ?></td>
+                                <td colspan="3">
+                                    <?php echo "<a class='acoes atualizar' href='/eletiva/atualizar?id=" .  $eletiva["idEletiva"] . "'>Atualizar</a>"; ?>
+                                    <?php echo "<a class='acoes excluir' href='/eletiva/delete?id=" . $eletiva["idEletiva"] . "'>Excluir</a>"; ?>
+                                </td>
+                            <?php } ?>
                         </tr>
                     <?php } ?>
                 </tbody>

@@ -15,6 +15,10 @@
     <main>
         <div class="alinhar">
             <h1>Lista de Alunos</h1>
+            <form action="/eletiva/alunos" method="GET">
+                <input type="search" placeholder="Pesquisa" id="search" name="search">
+                <button type="submit" style="width: 50px; heigth:150px;">Pesquisar</button>
+            </form>
             <table>
                 <thead>
                     <tr>
@@ -26,9 +30,16 @@
                 <tbody>
                     <?php foreach ($listaAlunos as $aluno) { ?>
                         <tr>
-                            <td scope="row" colspan="3"> <?php echo $aluno["idAluno"]; ?></td>
-                            <td colspan="3"> <?php echo $aluno["usuario"]; ?></td>
-                            <td colspan="3"> <?php echo $aluno["nome"]; ?></td>
+                            <?php if (is_null($aluno)) { ?>
+                                <?php $aluno = $listaAlunos; ?>
+                                <td scope="row" colspan="3"> <?php echo $aluno["idAluno"]; ?></td>
+                                <td colspan="3"> <?php echo $aluno["usuario"]; ?></td>
+                                <td colspan="3"> <?php echo $aluno["nome"]; ?></td>
+                            <?php }else if (!is_null($aluno)) { ?>
+                                    <td scope="row" colspan="3"> <?php echo $aluno["idAluno"]; ?></td>
+                                    <td colspan="3"> <?php echo $aluno["usuario"]; ?></td>
+                                    <td colspan="3"> <?php echo $aluno["nome"]; ?></td>
+                            <?php } ?>
                         </tr>
                     <?php } ?>
                 </tbody>

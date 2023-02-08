@@ -4,19 +4,6 @@
     font-family: cursive;
 }
 
-header {
-    width: 100%;
-    height: auto;
-    background-color: rgb(0, 141, 235);
-    padding: 10px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    position: fixed;
-    overflow: hidden;
-}
-
-
 h1 {
     color: white;
     font-size: 35px;
@@ -105,8 +92,6 @@ main {
 .info p {
     margin-left: 5px;
 }
-
-
 
 @media (max-width: 890px) {
     h1 {

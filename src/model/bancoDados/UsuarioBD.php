@@ -171,10 +171,7 @@ class UsuarioBD
         $comando = "SELECT * FROM Usuarios WHERE usuario = ?;";
         
         $preparacao = $this->conexao->mysqli->prepare($comando);
-        $preparacao->bind_param(
-            "s", 
-            $pesquisa
-        );
+        $preparacao->bind_param("s", $pesquisa);
         $preparacao->execute();
 
         $resultado = $preparacao->get_result();
@@ -182,8 +179,30 @@ class UsuarioBD
             return null;
         }
 
-        
-        $this->conexao->fecharConexao();
+        $linha = $resultado->fetch_assoc();
+        if (is_null($linha)) {
+            die(
+                "<html>" .
+                    "<head>" .
+                    "<link rel= 'stylesheet' href='/librares/css/reset.css'>" . 
+                    "<link rel='stylesheet' href='/librares/css/styles_erro.css'>" .
+                    "<title>" . "ETEletivas" . "</title>" .
+                    "</head>" .
+                    "<body>" .
+                        "<main>" . 
+                            "<div>" .
+                                "<h1>Usuário não encontrado</h1>" . 
+                                "<a href = '/usuario/lista'>Retornar</a>" . 
+                            "</div>" .
+                        "</main>" .
+                    "</body>" .
+                "</html>"
+            );
+        } else if (!is_null($linha)) {
+            $usuario = new Usuario($linha["usuario"], $linha["nivelDeAcesso"],  $linha["numeroMatricula"], $linha["senha"], null, $linha["id"]);
+            $this->conexao->fecharConexao();
+            return $usuario;
+        }
     }
     
 

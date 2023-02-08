@@ -4,6 +4,7 @@ namespace My_Web_Struct\controller;
 
 use My_Web_Struct\controller\inheritance\Controller;
 use My_Web_Struct\model\bancoDados\UsuarioBD;
+use My_Web_Struct\model\bancoDados\AlunoBD;
 
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface;
@@ -46,6 +47,8 @@ class LoginController extends Controller implements RequestHandlerInterface
         $usuarioBD = new UsuarioBD;
         $usuario = $usuarioBD->getUsuarioLogin($loginUsuario);
 
+        $alunoBD = new AlunoBD;
+
         $senha = $usuario->validarSenha($senhaUsuario);
 
 
@@ -53,6 +56,7 @@ class LoginController extends Controller implements RequestHandlerInterface
             $_SESSION["usuario"] = $loginUsuario;
             $_SESSION["credential"] = $usuario->getNivel();
             $_SESSION["id"] = $usuario->getId();
+            $_SESSION["eletiva"] = $alunoBD->getEletiva($usuario->getId())[0];
 
             return new Response(302, ["Location" => "/main_page"],);
         } else {

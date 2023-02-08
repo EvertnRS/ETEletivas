@@ -11,10 +11,3 @@ function sair(){
     const sair = document.querySelector(".sair")
     sair.classList.toggle("aparecer")
 }
-
-
-
-function searchData(){
-    const pesquisa = document.querySelector(".pesquisa")
-    window.location = "?search="+pesquisa.value
-}

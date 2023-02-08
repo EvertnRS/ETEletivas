@@ -23,15 +23,13 @@ class UsuarioController extends Controller implements RequestHandlerInterface
         } else if (strpos($path_info, "add")) {
             $response = $this->addUsuario($request);
         } else if (strpos($path_info, "lista")) {
-            $response = $this->list();
+            $response = $this->list($request);
         } else if (strpos($path_info, "atualizar")) {
             $response = $this->atualizar($request);
         } else if (strpos($path_info, "update")) {
             $response = $this->update($request);
         } else if (strpos($path_info, "delete")) {
             $response = $this->delete($request);
-        } else if (strpos($path_info, "search")) {
-            $response = $this->search($request);
         } else {
             $bodyHttp = $this->getHTTPBodyBuffer("/erro/Erro_404.php",);
             $response = new Response(200, [], $bodyHttp);
@@ -75,15 +73,27 @@ class UsuarioController extends Controller implements RequestHandlerInterface
         return $response;
     }
     
-    public function list(): ResponseInterface
+    public function list(ServerRequestInterface $request): ResponseInterface
     {
         $validate = $this->validateCredentials(["adm"]);
         if (!is_null($validate)) {
             return $validate;
         }
-        $usuarioBD = new UsuarioBD();
 
-        $dados = ["listaUsuarios" => $usuarioBD->getLista()];
+        $pesquisa = (isset($request->getQueryParams()['search'])) ? $request->getQueryParams()['search'] : null;
+
+        if (is_null($pesquisa)) {
+
+            $usuarioBD = new UsuarioBD();
+    
+            $dados = ["listaUsuarios" => $usuarioBD->getLista()];
+
+        } else if (!is_null($pesquisa)) {
+
+            $usuarioBD = new UsuarioBD();
+
+            $dados = ["listaUsuarios" => $usuarioBD->pesquisar($pesquisa)];
+        }
 
         $bodyHttp = $this->getHTTPBodyBuffer("/usuario/lista.php", $dados);
         $response = new Response(200, [], $bodyHttp);
@@ -140,20 +150,31 @@ class UsuarioController extends Controller implements RequestHandlerInterface
         return $response;
     }
 
-    public function search(ServerRequestInterface $request): ResponseInterface
-    {
-        $validate = $this->validateCredentials(["adm"]);
+    // public function search(ServerRequestInterface $request): ResponseInterface
+    // {
+    //     $validate = $this->validateCredentials(["adm"]);
         
-        if (!is_null($validate)) {
-            return $validate;
-        }
+    //     if (!is_null($validate)) {
+    //         return $validate;
+    //     }
 
-        $pesquisa = (isset($request->getQueryParams()['search'])) ? $request->getQueryParams()['search'] : null;
+    //     $pesquisa = (isset($request->getQueryParams()['search'])) ? $request->getQueryParams()['search'] : null;
         
-        $usuarioBD = new UsuarioBD();
-        $usuarioBD->pesquisar($pesquisa);
+    //     $usuarioBD = new UsuarioBD();
+    //$usuario = $usuar     ioBD->pesquisar($pesquisa);
 
-        $response = new Response(302, ["Location" => "/usuario/lista"], null);
-        return $response;
-    }
+    //     $id = $usuario->getId();
+    //     $nome = $usuario->getLogin();
+    //     $nivel = $usuario->getNivel();
+
+    //     $usuario = [$id, $nome, $nivel];
+
+    //     // $dados = ["listaUsuarios" => $usuario];
+
+    //     // $bodyHttp = $this->getHTTPBodyBuffer("/usuario/lista.php", $dados);
+    //     // $response = new Response(200, [], $bodyHttp);
+    //     // return $response;
+    //     $response = new Response(302, ["Location" => "/usuario/lista"], null);
+    //     return $response;
+    // }
 }

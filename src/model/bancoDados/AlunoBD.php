@@ -42,6 +42,29 @@ class AlunoBD
         $this->conexao->fecharConexao();
     }
 
+    public function getEletiva($id)
+    {
+        $comando = "SELECT * FROM Eletivas e INNER JOIN Alunos a on (a.eletiva = e.idEletiva) WHERE a.idAluno = ?;";
+
+        $preparacao = $this->conexao->mysqli->prepare($comando);
+        $preparacao->bind_param("i", $id);
+        $preparacao->execute();
+
+        $resultado = $preparacao->get_result();
+        if ($resultado == false) {
+            return null;
+        }
+
+        $eletiva = [];
+
+        while ($linha = $resultado->fetch_assoc()) {
+            $eletiva[] = $linha; //new Eletiva($linha["nome"], $linha["descricao"], $linha["areaConhecimento"], $linha["idProfessor"], $linha["idEletiva"]);
+        }
+
+        $this->conexao->fecharConexao();
+        return $eletiva;
+    }
+
     /* public function atualizar(Usuario $usuairoAtualizado)
     {
         $comando = "UPDATE Usuarios SET usuario = ?, senha = ?, nivelDeAcesso = ?, numeroMatricula = ? WHERE id = ?;";

@@ -13,13 +13,14 @@ class Eletiva
     private $vagas;
 
 
-    public function __construct($nome, $descricao, $areaConhecimento, $idProfessor, $idEletiva = null, $vagas = null,)
+    public function __construct($nome, $descricao, $areaConhecimento, $idProfessor, $idEletiva = null)
     {
         $this->nome = $nome;
         $this->descricao = $descricao;
         $this->areaConhecimento = $areaConhecimento;
         $this->idProfessor = $idProfessor;
         $this->idEletiva = $idEletiva;
+        $this->vagas = 30;
     }
 
     public function getId()

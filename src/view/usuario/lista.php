@@ -15,11 +15,9 @@
     <main>
         <div class="alinhar">
             <h1>Lista de Usuarios</h1>
-            <form action="/usuario/search" method="GET">
-                <div>
-                    <input type="search" placeholder="Pesquisa" id="search" name="search">
-                    <button type="submit" style="width: 50px; heigth:150px;">
-                    </button>
+            <form action="/usuario/lista" method="GET">
+                <input type="search" placeholder="Pesquisa" id="search" name="search">
+                <button type="submit" style="width: 50px; heigth:150px;">Pesquisar</button>
             </form>
             <table>
                 <thead>
@@ -33,16 +31,26 @@
                 <tbody>
                     <?php foreach ($listaUsuarios as $usuario) { ?>
                         <tr>
-                            <td scope="row" colspan="3"> <?php echo $usuario->getId(); ?></td>
-                            <td colspan="3"> <?php echo $usuario->getLogin(); ?></td>
-                            <td colspan="3"> <?php echo $usuario->getNivel(); ?></td>
-                            <td colspan="3">
-                                <?php echo "<a class='acoes atualizar' href='/usuario/atualizar?id=" .  $usuario->getId() . "'>Atualizar</a>"; ?>
-                                <?php echo "<a class='acoes excluir' href='/usuario/delete?id=" . $usuario->getId() . "'>Excluir</a>"; ?>
-                            </td>
+                            <?php if (is_null($usuario)) { ?>
+                                <?php $usuario = $listaUsuarios; ?>
+                                <td scope="row" colspan="3"> <?php echo $usuario->getId(); ?></td>
+                                <td colspan="3"> <?php echo $usuario->getLogin(); ?></td>
+                                <td colspan="3"> <?php echo $usuario->getNivel(); ?></td>
+                                <td colspan="3">
+                                    <?php echo "<a class='acoes atualizar' href='/usuario/atualizar?id=" .  $usuario->getId() . "'>Atualizar</a>"; ?>
+                                    <?php echo "<a class='acoes excluir' href='/usuario/delete?id=" . $usuario->getId() . "'>Excluir</a>"; ?>
+                                </td>
+                            <?php }else if (!is_null($usuario)) { ?>
+                                <td scope="row" colspan="3"> <?php echo $usuario->getId(); ?></td>
+                                <td colspan="3"> <?php echo $usuario->getLogin(); ?></td>
+                                <td colspan="3"> <?php echo $usuario->getNivel(); ?></td>
+                                <td colspan="3">
+                                    <?php echo "<a class='acoes atualizar' href='/usuario/atualizar?id=" .  $usuario->getId() . "'>Atualizar</a>"; ?>
+                                    <?php echo "<a class='acoes excluir' href='/usuario/delete?id=" . $usuario->getId() . "'>Excluir</a>"; ?>
+                                </td>
+                            <?php } ?>
                         </tr>
                     <?php } ?>
-
                 </tbody>
             </table>
         </div>

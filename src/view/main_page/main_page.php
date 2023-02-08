@@ -36,8 +36,7 @@
     <main class="corpo">
         <h2 class="bem_vindo">Bem-vindo, <?php echo $_SESSION['usuario']; ?>!</h2>
         <div class="content">
-            <?php if ($_SESSION["credential"] == "nivel1") { ?>
-                
+            <?php if ($_SESSION["credential"] == "nivel1" && $_SESSION["eletiva"] == null) { ?>
                 <a href="/eletiva/escolher" class="link">
                     <div class="item">
                         <p>Entrar na Eletiva</p>

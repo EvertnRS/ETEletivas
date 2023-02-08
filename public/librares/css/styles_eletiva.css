@@ -5,28 +5,6 @@ body {
     background-color: rgb(14, 14, 12);
 }
 
-header {
-    width: 100%;
-    height: auto;
-    background-color: rgb(0, 141, 235);
-    padding: 10px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.seta {
-    color: white;
-    font-size: 25px;
-}
-
-header h1 {
-    color: white;
-    position: absolute;
-    left: 40vw;
-    font-size: 35px;
-}
-
 main {
     background-color: white;
     width: 70%;
@@ -35,6 +13,10 @@ main {
     border-radius: 20px;
     box-shadow: rgba(255, 255, 255, 0.2) 0px 10px 20px 0px;
     padding: 40px;
+}
+
+h1 {
+    text-align: center;
 }
 
 h2 {
@@ -76,6 +58,7 @@ h2 {
     font-family: cursive;
     font-size: 16px;
     font-weight: bold;
+    text-decoration: none;
     transition: background-color 0.2s ease-in-out;
 }
 

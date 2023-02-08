@@ -28,7 +28,7 @@ class EletivasController extends Controller implements RequestHandlerInterface
         } else if (strpos($path_info, "add")) {
             $response = $this->addEletiva($request);
         } else if (strpos($path_info, "lista")) {
-            $response = $this->list();
+            $response = $this->list($request);
         } else if (strpos($path_info, "delete")) {
             $response = $this->delete($request);
         } else if (strpos($path_info, "atualizar")) {
@@ -36,7 +36,9 @@ class EletivasController extends Controller implements RequestHandlerInterface
         } else if (strpos($path_info, "update")) {
             $response = $this->update($request);
         } else if (strpos($path_info, "escolher")) {
-            $response = $this->escolher($request);
+            $response = $this->escolher();
+        } else if (strpos($path_info, "choice")) {
+            $response = $this->choice($request);
         } else if (strpos($path_info, "escolhida")) {
             $response = $this->escolhida($request);
         } else if (strpos($path_info, "alunos")) {
@@ -83,16 +85,29 @@ class EletivasController extends Controller implements RequestHandlerInterface
         return $response;
     }
 
-    public function list(): ResponseInterface
+    public function list(ServerRequestInterface $request): ResponseInterface
     {
         $validate = $this->validateCredentials(["adm", "nivel2"]);
         if (!is_null($validate)) {
             return $validate;
         }
-        $eletivaBD = new EletivaBD();
 
-        $dados = ["listaEletivas" => $eletivaBD->getListaEletiva()];
+        $pesquisa = (isset($request->getQueryParams()['search'])) ? $request->getQueryParams()['search'] : null;
 
+        if (is_null($pesquisa)) {
+
+            $eletivaBD = new EletivaBD();
+    
+            $dados = ["listaEletivas" => $eletivaBD->getListaEletiva()];
+
+        } else if (!is_null($pesquisa)) {
+
+            $eletivaBD = new EletivaBD();
+
+            $dados = ["listaEletivas" => $eletivaBD->pesquisarEletiva($pesquisa)];
+
+        }
+        
         $bodyHttp = $this->getHTTPBodyBuffer("/eletiva/listaEletiva.php", $dados);
         $response = new Response(200, [], $bodyHttp);
         return $response;
@@ -157,7 +172,7 @@ class EletivasController extends Controller implements RequestHandlerInterface
         }
 
         $listaBD = new EletivaBD();
-        $listaEletivas = $listaBD->getListaEletiva();
+        $listaEletivas = $listaBD->getDisponiveis();
         
 
         $bodyHttp = $this->getHTTPBodyBuffer("/eletiva/escolher.php", ["listaEletivas" => $listaEletivas]);
@@ -172,7 +187,33 @@ class EletivasController extends Controller implements RequestHandlerInterface
             return $validate;
         }
 
-        $idEletiva = $request->getParsedBody()["eletiva"];
+        $eletivaBD = new EletivaBD();
+        $eletiva = $eletivaBD->getEletiva($request->getQueryParams()["id"]);
+
+        $eletivaBD = new EletivaBD();
+        $professor = $eletivaBD->getProfessor($request->getQueryParams()["id"]);
+
+        $dados = [
+            "id" => $eletiva->getId(),
+            "nome" => $eletiva->getNome(),
+            "resumo" => $eletiva->getDescricao(),
+            "professor" => $professor[0],
+            "area" => $eletiva->getAreaConhecimento(),
+        ];
+
+        $bodyHttp = $this->getHTTPBodyBuffer("/eletiva/escolhida.php", ["dados" => $dados]);
+        $response = new Response(200, [], $bodyHttp);
+        return $response;
+    }
+
+    public function choice(ServerRequestInterface $request): ResponseInterface
+    {
+        $validate = $this->validateCredentials(["nivel1"]);
+        if (!is_null($validate)) {
+            return $validate;
+        }
+
+        $idEletiva = $request->getQueryParams()["id"];
 
         $eletivaBD = new EletivaBD();
         $nome = $eletivaBD->getEletivaPorId($idEletiva);
@@ -189,7 +230,7 @@ class EletivasController extends Controller implements RequestHandlerInterface
             $alunoBD = new AlunoBD();
             $aluno = new Aluno(
                 $_SESSION["id"],                        /* ID DO USUARIO LOGADO */
-                $request->getParsedBody()["eletiva"],   /* ELETIVA SELECIONADA */
+                $request->getQueryParams()["id"],   /* ELETIVA SELECIONADA */
                 $_SESSION["id"]                         /* IDALUNO - AUTO_INCREMENT PELO BANCO */
             );
 
@@ -215,15 +256,29 @@ class EletivasController extends Controller implements RequestHandlerInterface
             return $validate;
         }
 
+        $pesquisa = (isset($request->getQueryParams()['search'])) ? $request->getQueryParams()['search'] : null;
+
         $id = $_SESSION["id"];
 
-        $eletivaNome = new EletivaBD();
-        $eletivaNome = $eletivaNome->getEletivaPorProfessor($id);
+        if (is_null($pesquisa)) {
 
-        $listaAlunos = new EletivaBD();
-        $listaAlunos = $listaAlunos->getListaAlunos($eletivaNome[0]);
+            $eletivaNome = new EletivaBD();
+            $eletivaNome = $eletivaNome->getEletivaPorProfessor($id);
+    
+            $listaAlunos = new EletivaBD();
+            $listaAlunos = $listaAlunos->getListaAlunos($eletivaNome[0]);
+
+            $dados = ["listaAlunos" => $listaAlunos];
+
+        } else if (!is_null($pesquisa)) {
+
+            $eletivaBD = new EletivaBD();
+
+            $dados = ["listaAlunos" => $eletivaBD->pesquisarAluno($pesquisa)];
+        }
+
         
-        $bodyHttp = $this->getHTTPBodyBuffer("/eletiva/listaAlunos.php", ["listaAlunos" => $listaAlunos]);
+        $bodyHttp = $this->getHTTPBodyBuffer("/eletiva/listaAlunos.php", $dados);
         $response = new Response(200, [], $bodyHttp);
         return $response;
     }

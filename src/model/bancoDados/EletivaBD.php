@@ -138,9 +138,35 @@ class EletivaBD
     //     }
     // }
 
+    // public function getAluno($id)
+    // {
+    //     $comando = "SELECT * FROM Eletivas e INNER JOIN Alunos a on (a.eletiva = e.idEletiva) WHERE a.idAluno = ?;";
+
+    //     $preparacao = $this->conexao->mysqli->prepare($comando);
+    //     $preparacao->bind_param("s", $nome);
+    //     $preparacao->execute();
+
+    //     $resultado = $preparacao->get_result();
+    //     if ($resultado == false) {
+    //         return null;
+    //     }
+
+    //     $aluno = [];
+
+    //     while ($linha = $resultado->fetch_assoc()) {
+    //         $aluno[] = $linha; //new Eletiva($linha["nome"], $linha["descricao"], $linha["areaConhecimento"], $linha["idProfessor"], $linha["idEletiva"]);
+    //     }
+
+    //     var_dump($aluno);
+    //     exit;
+
+    //     $this->conexao->fecharConexao();
+    //     return $aluno;
+    // }
+
     public function getListaAlunos($nome)
     {
-        $comando = "SELECT a.idAluno, u.usuario, e.nome FROM Alunos a INNER JOIN Usuarios u on (a.idAluno = u.id) INNER JOIN Eletivas e on (a.eletiva = e.idEletiva) WHERE e.nome = ?";
+        $comando = "SELECT a.idAluno, u.usuario, e.nome FROM Alunos a INNER JOIN Usuarios u on (a.idAluno = u.id) INNER JOIN Eletivas e on (a.eletiva = e.idEletiva) WHERE e.nome = ?;";
 
         $preparacao = $this->conexao->mysqli->prepare($comando);
         $preparacao->bind_param("s", $nome);
@@ -231,6 +257,126 @@ class EletivaBD
         $resultado = $preparacao->get_result();
         if ($resultado == false) {
             return null;
+        }
+    }
+
+    public function getProfessor($id) {
+        $comando = "SELECT u.usuario FROM Usuarios u INNER JOIN Eletivas e on (e.idProfessor = u.id) WHERE e.idEletiva = ?;";
+
+        $preparacao = $this->conexao->mysqli->prepare($comando);
+        $preparacao->bind_param("i", $id);
+        $preparacao->execute();
+
+        $resultado = $preparacao->get_result();
+        if ($resultado == false) {
+            return null;
+        }
+
+        $professor = array();
+        while ($linha = $resultado->fetch_assoc()) {
+            $professor[] = $linha['usuario'];
+        }
+    
+        return $professor;
+    }
+
+    public function getDisponiveis()
+    {
+        $comando = "SELECT e.*, u.usuario FROM Eletivas e LEFT JOIN Usuarios u on (u.id = e.idProfessor) WHERE e.vagas != 0;";
+
+        $resultado = $this->conexao->mysqli->query($comando);
+        if ($resultado == false) {
+            return null;
+        }
+
+        $listaEletivas = [];
+
+        while ($linha = $resultado->fetch_assoc()) {
+            $listaEletivas[] = $linha; //new Eletiva($linha["nome"], $linha["descricao"], $linha["areaConhecimento"], $linha["idProfessor"], $linha["idEletiva"]);
+        }
+
+        $this->conexao->fecharConexao();
+        return $listaEletivas;
+    }
+
+    public function pesquisarEletiva($pesquisa) {
+        $comando = "SELECT * FROM Eletivas WHERE nome = ?;";
+
+        $preparacao = $this->conexao->mysqli->prepare($comando);
+        $preparacao->bind_param("s", $pesquisa);
+        $preparacao->execute();
+
+        $resultado = $preparacao->get_result();
+        if ($resultado == false) {
+            return null;
+        }
+
+        $linha = $resultado->fetch_assoc();
+        if (is_null($linha)) {
+            die(
+                "<html>" .
+                    "<head>" .
+                    "<link rel= 'stylesheet' href='/librares/css/reset.css'>" . 
+                    "<link rel='stylesheet' href='/librares/css/styles_erro.css'>" .
+                    "<title>" . "ETEletivas" . "</title>" .
+                    "</head>" .
+                    "<body>" .
+                        "<main>" . 
+                            "<div>" .
+                                "<h1>Eletiva não encontrada</h1>" . 
+                                "<a href = '/eletiva/lista'>Retornar</a>" . 
+                            "</div>" .
+                        "</main>" .
+                    "</body>" .
+                "</html>"
+            );
+        } else if (!is_null($linha)) {
+            $eletiva = new Eletiva($linha["nome"], $linha["descricao"],  $linha["areaConhecimento"], $linha["idProfessor"], $linha["idEletiva"]);
+            $this->conexao->fecharConexao();
+            return $eletiva;
+        }
+    }
+
+    public function pesquisarAluno($pesquisa) {
+        $comando = "SELECT a.idAluno, u.usuario, e.nome FROM Alunos a INNER JOIN Usuarios u on (a.idAluno = u.id) INNER JOIN Eletivas e on (a.eletiva = e.idEletiva) WHERE u.usuario = ?;";
+
+        $preparacao = $this->conexao->mysqli->prepare($comando);
+        $preparacao->bind_param("s", $pesquisa);
+        $preparacao->execute();
+
+        $resultado = $preparacao->get_result();
+        if ($resultado == false) {
+            return null;
+        }
+
+        $linha = $resultado->fetch_assoc();
+        if (is_null($linha)) {
+            die(
+                "<html>" .
+                    "<head>" .
+                    "<link rel= 'stylesheet' href='/librares/css/reset.css'>" . 
+                    "<link rel='stylesheet' href='/librares/css/styles_erro.css'>" .
+                    "<title>" . "ETEletivas" . "</title>" .
+                    "</head>" .
+                    "<body>" .
+                        "<main>" . 
+                            "<div>" .
+                                "<h1>Eletiva não encontrada</h1>" . 
+                                "<a href = '/eletiva/lista'>Retornar</a>" . 
+                            "</div>" .
+                        "</main>" .
+                    "</body>" .
+                "</html>"
+            );
+        } else if (!is_null($linha)) {
+            $listaAlunos = [];
+
+            while ($linha = $resultado->fetch_assoc()) {
+                $listaAlunos[] = $linha; //new Eletiva($linha["nome"], $linha["descricao"], $linha["areaConhecimento"], $linha["idProfessor"], $linha["idEletiva"]);
+            }
+
+            $this->conexao->fecharConexao();
+            return $listaAlunos;
         }
     }
 
